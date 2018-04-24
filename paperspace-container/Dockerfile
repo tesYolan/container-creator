@@ -27,7 +27,7 @@ RUN apt-get install -y --no-install-recommends \
     rm -rf /var/lib/apt/lists/*
 ENV ASSUME_YES 1
 RUN curl https://raw.githubusercontent.com/hansonrobotics/hrtool/master/get_hr.bash|bash
-ENV GITHUB_TOKEN 4226eb53d9e5b7229a89d2762d7cf0f27a2ce1e3
+ENV GITHUB_TOKEN 9c8fa57d9a86d6303303e0c439d5c088c61d4cc9 # DUMMY TOKEN, IT DOESN'T WORK
 RUN hr cmd use_git_ssh
 RUN hr install head-hr-ext
 ADD .ssh/ /root/.ssh/
