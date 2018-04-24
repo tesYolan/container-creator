@@ -1,0 +1,33 @@
+version: '2'
+services:
+    HEAD:
+        image: hanson:screen_layout
+        container_name: "HEAD"
+        environment:
+            - DISPLAY=:1
+            - QT_X11_NO_MITSHM=:1
+        volumes:
+            - /tmp/.X11-unix:/tmp/.X11-unix:rw
+            - /home/tesfa/.ssh/:/root/.ssh/
+            - /home/tesfa/clone_dir/hr_launchpad:/root/hansonrobotics/hr_launchpad
+        ports:
+            - 8000:8000
+            - 8004:6006
+            - 4000:4000
+            - 4242:4242
+            - 11311:11311
+            - 9094:9094
+            - 9090:9090
+        privileged: true
+        user: root
+        links:
+            - mongodb
+        depends_on:
+            - mongodb
+        command: python /root/hansonrobotics/hr_launchpad/misc.py
+    mongodb:
+        image: mongo:latest
+        container_name: "mongodb"
+        ports:
+            - 27017:27017
+        command: mongod --smallfiles --logpath=/dev/null # --quiet
