@@ -10,6 +10,7 @@ services:
             - /tmp/.X11-unix:/tmp/.X11-unix:rw
             - /home/tesfa/.ssh/:/root/.ssh/
             - /home/tesfa/clone_dir/hr_launchpad:/root/hansonrobotics/hr_launchpad
+            - /var/run/docker.sock:/var/run/docker.sock
         ports:
             - 8000:8000
             - 8004:6006
@@ -24,7 +25,7 @@ services:
             - mongodb
         depends_on:
             - mongodb
-        command: python /root/hansonrobotics/hr_launchpad/misc.py
+        command: /bin/bash
     mongodb:
         image: mongo:latest
         container_name: "mongodb"
