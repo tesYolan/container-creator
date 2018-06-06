@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM nvidia/opengl:1.0-glvnd-devel-ubuntu16.04
 
 RUN apt-get update 
 RUN apt-get install -y --no-install-recommends \
@@ -27,7 +27,7 @@ RUN apt-get install -y --no-install-recommends \
     rm -rf /var/lib/apt/lists/*
 ENV ASSUME_YES 1
 RUN curl https://raw.githubusercontent.com/hansonrobotics/hrtool/master/get_hr.bash|bash
-ENV GITHUB_TOKEN SKDf
+ENV GITHUB_TOKEN GKSDJ
 RUN hr cmd use_git_ssh
 RUN hr install head-hr-ext
 ADD .ssh/ /root/.ssh/

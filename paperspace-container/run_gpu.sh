@@ -1,5 +1,5 @@
 #!/bin/bash
-export DISPLAY=:0
+export DISPLAY=:1
 xhost +local:root
 docker run \
     -it \
@@ -12,7 +12,8 @@ docker run \
     -p 9090:9090 \
     --volume="/var/run/docker.sock:/var/run/docker.sock" \
     --privileged \
-    --env="DISPLAY=:0" \
+    --runtime nvidia \
+    --env="DISPLAY=:1" \
     --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
     --name puppet \
     hanson:newest /bin/bash 
