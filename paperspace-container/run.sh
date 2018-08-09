@@ -14,8 +14,8 @@ docker run \
     --privileged \
     --env="DISPLAY=:0" \
     --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
-    --name puppet \
-    hanson:newest /bin/bash 
+    --name opencog_cpu \
+    hanson:opencog /bin/bash 
 xhost -local:root
 #-p 11311:11311 \
 #    -p 8000:8000 \

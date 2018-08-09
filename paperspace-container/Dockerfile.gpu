@@ -1,6 +1,6 @@
 FROM nvidia/opengl:1.0-glvnd-devel-ubuntu16.04
 
-RUN apt-get update 
+RUN apt-get update && apt-get upgrade -y
 RUN apt-get install -y --no-install-recommends \
         git \
         ca-certificates \
@@ -23,32 +23,22 @@ RUN apt-get install -y --no-install-recommends \
         lsb-release \
         vim \
         software-properties-common \
+        net-tools \
+        netcat \
+	libslf4j-java \
+	liblogback-java \
         libvulkan-dev && \
     rm -rf /var/lib/apt/lists/*
+RUN touch /var/log/syslog
 ENV ASSUME_YES 1
-RUN curl https://raw.githubusercontent.com/hansonrobotics/hrtool/master/get_hr.bash|bash
-ENV GITHUB_TOKEN GKSDJ
+RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash - && apt-get install -y nodejs
+RUN curl https://raw.githubusercontent.com/hansonrobotics/hrtool/master/get_hr.bash -o /tmp/get_hr.bash
+RUN apt-get update && apt-get upgrade -y && bash /tmp/get_hr.bash
+RUN hr init /hansonrobotics
+ENV GITHUB_TOKEN ADD_YOUR_TOKEN_HERE
 RUN hr cmd use_git_ssh
-RUN hr install head-hr-ext
+# TODO HACK as https cloning queries passwd
 ADD .ssh/ /root/.ssh/
-RUN hr install -f head
-# DONOT TOUCH ABOVE FOR NOW
-RUN mkdir -p /root/blender-git
-WORKDIR /root/blender-git
-RUN git clone https://git.blender.org/blender.git
-WORKDIR /root/blender-git/blender
-RUN git submodule update --init --recursive
-RUN git submodule foreach git checkout master
-RUN git submodule foreach git pull --rebase origin master
-RUN git checkout v2.79-rc2
-WORKDIR /root/blender-git
-COPY writeffmpeg.c /root/blender-git/blender/source/blender/blenkernel/intern/writeffmpeg.c
-RUN /root/blender-git/blender/build_files/build_environment/install_deps.sh --with-all --skip-python --skip-numpy --no-confirm
-RUN mkdir -p /root/blender-git/blender/build
-WORKDIR /root/blender-git/blender/build
-RUN add-apt-repository ppa:deadsnakes/ppa -y 
-RUN apt-get install -y python3.6-dev
-RUN cmake -DWITH_CODEC_FFMPEG=ON -DPYTHON_VERSION=3.6 -DWITH_PYTHON_INSTALL=OFF -DWITH_PYTHON_INSTALL_NUMPY=OFF -DWITH_PYTHON_INSTALL_REQUESTS=OFF ..
-RUN make -j8
-RUN make install
-RUN pip install zerorpc
+RUN hr install head-hr-ext
+RUN hr install head
+RUN hr install opencog

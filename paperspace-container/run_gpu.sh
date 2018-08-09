@@ -15,8 +15,8 @@ docker run \
     --runtime nvidia \
     --env="DISPLAY=:1" \
     --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
-    --name puppet \
-    hanson:newest /bin/bash 
+    --name hr_gpu \
+    hanson:gpu /bin/bash 
 xhost -local:root
 #-p 11311:11311 \
 #    -p 8000:8000 \
